@@ -15,11 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { createVehicle, createJob, createFileRecord, getSignedUploadUrl } from "@/app/actions";
 import { JOB_TYPES, FILE_CATEGORIES } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Upload, Check, X, ChevronLeft, ChevronRight, Save } from "lucide-react";
+import { FolderUpload, UploadProgress, type UploadableFile } from "@/components/folder-upload";
+import { categorizeFile, formatFileSize, type FileCategory } from "@/lib/file-categories";
 
 interface VehicleOption {
   id: string;
@@ -66,7 +69,7 @@ export function NewJobForm({
   const [notes, setNotes] = useState("");
 
   // Step 3: Files
-  const [files, setFiles] = useState<{ file: File; category: string }[]>([]);
+  const [files, setFiles] = useState<UploadableFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -114,11 +117,12 @@ export function NewJobForm({
         status,
       });
 
-      // Upload files
-      if (files.length > 0) {
+      // Upload files (only selected ones)
+      const filesToUpload = files.filter((f) => f.selected !== false);
+      if (filesToUpload.length > 0) {
         setUploading(true);
-        for (let i = 0; i < files.length; i++) {
-          const { file, category } = files[i];
+        for (let i = 0; i < filesToUpload.length; i++) {
+          const { file, category } = filesToUpload[i];
           const path = `${userId}/${job.id}/${file.name}`;
 
           const { signedUrl, token } = await getSignedUploadUrl(path);
@@ -137,7 +141,7 @@ export function NewJobForm({
             file_category: category,
           });
 
-          setUploadProgress(((i + 1) / files.length) * 100);
+          setUploadProgress(((i + 1) / filesToUpload.length) * 100);
         }
         setUploading(false);
       }
@@ -404,99 +408,112 @@ export function NewJobForm({
             <CardTitle className="text-lg">3. Fájl feltöltés (opcionális)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div
-              className="border-2 border-dashed border-border/50 rounded-xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                const droppedFiles = Array.from(e.dataTransfer.files);
-                setFiles((prev) => [
-                  ...prev,
-                  ...droppedFiles.map((f) => ({ file: f, category: "other" })),
-                ]);
-              }}
-              onClick={() => {
-                const input = document.createElement("input");
-                input.type = "file";
-                input.multiple = true;
-                input.onchange = (e) => {
-                  const selectedFiles = Array.from(
-                    (e.target as HTMLInputElement).files || []
-                  );
-                  setFiles((prev) => [
-                    ...prev,
-                    ...selectedFiles.map((f) => ({ file: f, category: "other" })),
-                  ]);
-                };
-                input.click();
-              }}
-            >
-              <Upload className="mx-auto h-8 w-8 text-muted-foreground/40 mb-2" />
-              <p className="text-sm text-muted-foreground">
-                Húzd ide a fájlokat vagy kattints a tallózáshoz
-              </p>
-              <p className="text-[11px] text-muted-foreground/50 mt-1">Max 50 MB / fájl</p>
-            </div>
+            <Tabs defaultValue="files">
+              <TabsList className="w-full">
+                <TabsTrigger value="files" className="flex-1">Fájlok</TabsTrigger>
+                <TabsTrigger value="folder" className="flex-1">Mappa</TabsTrigger>
+              </TabsList>
 
-            {files.length > 0 && (
-              <div className="space-y-2">
-                {files.map((f, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 bg-muted/50 rounded-lg p-3"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">{f.file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {(f.file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                    <Select
-                      value={f.category}
-                      onValueChange={(val) => {
-                        setFiles((prev) =>
-                          prev.map((item, idx) =>
-                            idx === i ? { ...item, category: val ?? "other" } : item
-                          )
-                        );
-                      }}
-                    >
-                      <SelectTrigger className="w-44">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {FILE_CATEGORIES.map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value}>
-                            {cat.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+              {/* Individual files tab */}
+              <TabsContent value="files" className="space-y-4 mt-4">
+                <div
+                  className="border-2 border-dashed border-border/50 rounded-xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const droppedFiles = Array.from(e.dataTransfer.files);
+                    setFiles((prev) => [
+                      ...prev,
+                      ...droppedFiles.map((f) => ({ file: f, category: categorizeFile(f, f.name), relativePath: f.name, selected: true })),
+                    ]);
+                  }}
+                  onClick={() => {
+                    const input = document.createElement("input");
+                    input.type = "file";
+                    input.multiple = true;
+                    input.onchange = (e) => {
+                      const selectedFiles = Array.from(
+                        (e.target as HTMLInputElement).files || []
+                      );
+                      setFiles((prev) => [
+                        ...prev,
+                        ...selectedFiles.map((f) => ({ file: f, category: categorizeFile(f, f.name), relativePath: f.name, selected: true })),
+                      ]);
+                    };
+                    input.click();
+                  }}
+                >
+                  <Upload className="mx-auto h-8 w-8 text-muted-foreground/40 mb-2" />
+                  <p className="text-sm text-muted-foreground">
+                    Húzd ide a fájlokat vagy kattints a tallózáshoz
+                  </p>
+                  <p className="text-[11px] text-muted-foreground/50 mt-1">Max 50 MB / fájl</p>
+                </div>
+
+                {files.length > 0 && (
+                  <div className="space-y-2">
+                    {files.map((f, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 bg-muted/50 rounded-lg p-3"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{f.file.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatFileSize(f.file.size)}
+                          </p>
+                        </div>
+                        <Select
+                          value={f.category}
+                          onValueChange={(val) => {
+                            setFiles((prev) =>
+                              prev.map((item, idx) =>
+                                idx === i ? { ...item, category: (val ?? "other") as FileCategory } : item
+                              )
+                            );
+                          }}
+                        >
+                          <SelectTrigger className="w-44">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {FILE_CATEGORIES.map((cat) => (
+                              <SelectItem key={cat.value} value={cat.value}>
+                                {cat.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
+                          onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
+              </TabsContent>
+
+              {/* Folder upload tab */}
+              <TabsContent value="folder" className="mt-4">
+                <FolderUpload
+                  onFilesReady={(folderFiles) => setFiles(folderFiles)}
+                  existingFiles={files}
+                />
+              </TabsContent>
+            </Tabs>
 
             {uploading && (
-              <div className="space-y-1">
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${uploadProgress}%` }}
-                  />
-                </div>
-                <p className="text-xs text-muted-foreground text-center">
-                  Feltöltés... {Math.round(uploadProgress)}%
-                </p>
-              </div>
+              <UploadProgress
+                total={files.filter(f => f.selected !== false).length}
+                uploaded={Math.round((uploadProgress / 100) * files.filter(f => f.selected !== false).length)}
+                currentFile=""
+                errors={[]}
+              />
             )}
 
             <Separator />
