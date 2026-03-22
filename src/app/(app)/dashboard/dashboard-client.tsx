@@ -19,7 +19,7 @@ import {
   PlusCircle,
   Cpu,
   ArrowRight,
-  FileCheck,
+  Share2,
 } from "lucide-react";
 
 interface DashboardClientProps {
@@ -29,6 +29,7 @@ interface DashboardClientProps {
     totalVehicles: number;
     totalFiles: number;
     monthJobs: number;
+    sharedVehicles: number;
   };
   businessName: string;
 }
@@ -45,6 +46,7 @@ const statCards = [
   { key: "totalVehicles" as const, label: "JÁRMŰVEK", icon: Car, accent: "from-emerald-500/10" },
   { key: "totalFiles" as const, label: "FÁJLOK", icon: HardDrive, accent: "from-purple-500/10" },
   { key: "monthJobs" as const, label: "EZ A HÓNAP", icon: CalendarDays, accent: "from-cyan-500/10" },
+  { key: "sharedVehicles" as const, label: "MEGOSZTOTT", icon: Share2, accent: "from-amber-500/10" },
 ];
 
 function formatRelativeDate(dateStr: string): string {
@@ -94,7 +96,7 @@ export function DashboardClient({ jobs, stats, businessName }: DashboardClientPr
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {statCards.map((stat, i) => {
           const Icon = stat.icon;
           return (

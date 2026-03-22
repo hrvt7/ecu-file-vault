@@ -29,6 +29,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Public routes — no auth required
+  const isPublicRoute =
+    request.nextUrl.pathname.startsWith("/share/") ||
+    request.nextUrl.pathname.startsWith("/api/share/");
+
+  if (isPublicRoute) return supabaseResponse;
+
   // Redirect unauthenticated users to login
   const isAuthPage =
     request.nextUrl.pathname === "/login" ||

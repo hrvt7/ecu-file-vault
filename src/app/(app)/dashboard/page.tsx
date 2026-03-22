@@ -50,6 +50,11 @@ export default async function DashboardPage() {
     .select("*", { count: "exact", head: true })
     .gte("job_date", firstOfMonth.toISOString().split("T")[0]);
 
+  const { count: sharedVehicles } = await supabase
+    .from("share_tokens")
+    .select("*", { count: "exact", head: true })
+    .eq("is_active", true);
+
   const { data: profile } = await supabase
     .from("profiles")
     .select("business_name")
@@ -64,6 +69,7 @@ export default async function DashboardPage() {
         totalVehicles: totalVehicles ?? 0,
         totalFiles: totalFiles ?? 0,
         monthJobs: monthJobs ?? 0,
+        sharedVehicles: sharedVehicles ?? 0,
       }}
       businessName={profile?.business_name ?? ""}
     />
