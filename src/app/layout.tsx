@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -12,6 +13,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -27,9 +34,9 @@ export default function RootLayout({
   return (
     <html
       lang="hu"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col bg-background text-foreground bg-grid-pattern">
         <TooltipProvider>
           {children}
           <Toaster richColors position="top-right" />

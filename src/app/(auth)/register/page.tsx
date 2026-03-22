@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Cpu } from "lucide-react";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -54,25 +55,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-grid-pattern">
+      <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6 text-primary"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <line x1="19" x2="19" y1="8" y2="14" />
-              <line x1="22" x2="16" y1="11" y2="11" />
-            </svg>
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+            <Cpu className="h-6 w-6" />
           </div>
           <CardTitle className="text-2xl font-bold">Regisztráció</CardTitle>
           <CardDescription>

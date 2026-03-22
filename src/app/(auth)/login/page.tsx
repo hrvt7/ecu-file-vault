@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Cpu } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -46,24 +47,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-grid-pattern">
+      <Card className="w-full max-w-md glass-card">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-6 w-6 text-primary"
-            >
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-              <polyline points="10 17 15 12 10 7" />
-              <line x1="15" x2="3" y1="12" y2="12" />
-            </svg>
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+            <Cpu className="h-6 w-6" />
           </div>
           <CardTitle className="text-2xl font-bold">ECU File Vault</CardTitle>
           <CardDescription>

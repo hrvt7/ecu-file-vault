@@ -1,28 +1,32 @@
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-const typeColors: Record<string, string> = {
-  "Stage 1": "bg-blue-500/15 text-blue-400 border-blue-500/20",
-  "Stage 2": "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
-  "Stage 3": "bg-orange-500/15 text-orange-400 border-orange-500/20",
-  "DPF off": "bg-red-500/15 text-red-400 border-red-500/20",
-  "EGR off": "bg-pink-500/15 text-pink-400 border-pink-500/20",
-  "AdBlue off": "bg-purple-500/15 text-purple-400 border-purple-500/20",
-  "DTC off": "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
-  "TCU tune": "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
-  "Egyéb": "bg-gray-500/15 text-gray-400 border-gray-500/20",
+const typeConfig: Record<string, { bg: string; text: string; dot: string; glow: string }> = {
+  "Stage 1": { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400", glow: "shadow-[0_0_6px_rgba(59,130,246,0.3)]" },
+  "Stage 2": { bg: "bg-yellow-500/10", text: "text-yellow-400", dot: "bg-yellow-400", glow: "shadow-[0_0_6px_rgba(234,179,8,0.3)]" },
+  "Stage 3": { bg: "bg-orange-500/10", text: "text-orange-400", dot: "bg-orange-400", glow: "shadow-[0_0_6px_rgba(249,115,22,0.3)]" },
+  "DPF off": { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400", glow: "shadow-[0_0_6px_rgba(239,68,68,0.3)]" },
+  "EGR off": { bg: "bg-pink-500/10", text: "text-pink-400", dot: "bg-pink-400", glow: "shadow-[0_0_6px_rgba(236,72,153,0.3)]" },
+  "AdBlue off": { bg: "bg-purple-500/10", text: "text-purple-400", dot: "bg-purple-400", glow: "shadow-[0_0_6px_rgba(168,85,247,0.3)]" },
+  "DTC off": { bg: "bg-cyan-500/10", text: "text-cyan-400", dot: "bg-cyan-400", glow: "shadow-[0_0_6px_rgba(6,182,212,0.3)]" },
+  "TCU tune": { bg: "bg-emerald-500/10", text: "text-emerald-400", dot: "bg-emerald-400", glow: "shadow-[0_0_6px_rgba(52,211,153,0.3)]" },
+  "Egyéb": { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400", glow: "" },
 };
 
+const defaultConfig = typeConfig["Egyéb"];
+
 export function JobTypeBadge({ type }: { type: string }) {
+  const config = typeConfig[type] ?? defaultConfig;
   return (
-    <Badge
-      variant="outline"
+    <span
       className={cn(
-        "text-[11px] font-medium",
-        typeColors[type] ?? typeColors["Egyéb"]
+        "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-medium border border-transparent transition-shadow",
+        config.bg,
+        config.text,
+        config.glow
       )}
     >
+      <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", config.dot)} />
       {type}
-    </Badge>
+    </span>
   );
 }

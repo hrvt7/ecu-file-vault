@@ -14,12 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { createVehicle, createJob, createFileRecord, getSignedUploadUrl } from "@/app/actions";
 import { JOB_TYPES, FILE_CATEGORIES } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Upload, Check, X, ChevronLeft, ChevronRight, Save } from "lucide-react";
 
 interface VehicleOption {
   id: string;
@@ -312,17 +312,26 @@ export function NewJobForm({
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Munka típusok</Label>
-              <div className="flex flex-wrap gap-2">
-                {JOB_TYPES.map((type) => (
-                  <Badge
-                    key={type}
-                    variant={jobTypes.includes(type) ? "default" : "outline"}
-                    className="cursor-pointer select-none"
-                    onClick={() => toggleJobType(type)}
-                  >
-                    {type}
-                  </Badge>
-                ))}
+              <div className="grid grid-cols-3 gap-2">
+                {JOB_TYPES.map((type) => {
+                  const selected = jobTypes.includes(type);
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => toggleJobType(type)}
+                      className={cn(
+                        "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-150 border",
+                        selected
+                          ? "bg-primary/15 border-primary/30 text-primary"
+                          : "bg-secondary/30 border-border/50 text-muted-foreground hover:bg-secondary/60"
+                      )}
+                    >
+                      {selected && <Check className="h-3 w-3" />}
+                      {type}
+                    </button>
+                  );
+                })}
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -396,7 +405,7 @@ export function NewJobForm({
           </CardHeader>
           <CardContent className="space-y-4">
             <div
-              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              className="border-2 border-dashed border-border/50 rounded-xl p-8 text-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
                 e.preventDefault();
@@ -422,11 +431,11 @@ export function NewJobForm({
                 input.click();
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mx-auto h-8 w-8 text-muted-foreground mb-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>
+              <Upload className="mx-auto h-8 w-8 text-muted-foreground/40 mb-2" />
               <p className="text-sm text-muted-foreground">
                 Húzd ide a fájlokat vagy kattints a tallózáshoz
               </p>
-              <p className="text-xs text-muted-foreground mt-1">Max 50 MB / fájl</p>
+              <p className="text-[11px] text-muted-foreground/50 mt-1">Max 50 MB / fájl</p>
             </div>
 
             {files.length > 0 && (
@@ -466,10 +475,10 @@ export function NewJobForm({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="shrink-0"
+                      className="shrink-0 h-8 w-8 text-muted-foreground hover:text-destructive"
                       onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                      <X className="h-4 w-4" />
                     </Button>
                   </div>
                 ))}
@@ -496,7 +505,7 @@ export function NewJobForm({
                 Vissza
               </Button>
               <Button onClick={handleSubmit} disabled={loading || uploading}>
-                {loading ? "Mentés..." : "Munka mentése"}
+                {loading ? "Mentés folyamatban..." : "Munka rögzítése"}
               </Button>
             </div>
           </CardContent>
