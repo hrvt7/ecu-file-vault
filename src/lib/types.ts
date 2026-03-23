@@ -44,6 +44,12 @@ export interface Job {
   file_source: string | null;
   notes: string | null;
   status: "done" | "warranty" | "reclamation" | "in_progress";
+  warranty_months: number | null;
+  warranty_expires_at: string | null;
+  warranty_conditions: string | null;
+  warranty_claimed: boolean;
+  warranty_claim_date: string | null;
+  warranty_claim_notes: string | null;
   created_at: string;
 }
 
@@ -62,6 +68,56 @@ export interface FileRecord {
 export interface JobWithVehicle extends Job {
   vehicles: Vehicle;
   file_count?: number;
+}
+
+export interface PriceListItem {
+  id: string;
+  profile_id: string;
+  brand: string;
+  engine_pattern: string;
+  stage: string;
+  price_net: number;
+  price_note: string | null;
+  created_at: string;
+}
+
+export interface QuoteItem {
+  name: string;
+  quantity: number;
+  price_net: number;
+}
+
+export interface Quote {
+  id: string;
+  profile_id: string;
+  vehicle_id: string | null;
+  customer_name: string | null;
+  customer_phone: string | null;
+  customer_email: string | null;
+  car_description: string;
+  items: QuoteItem[];
+  total_net: number;
+  total_gross: number;
+  vat_percent: number;
+  status: "draft" | "sent" | "accepted" | "rejected" | "expired";
+  valid_until: string | null;
+  notes: string | null;
+  pdf_path: string | null;
+  created_at: string;
+}
+
+export interface Appointment {
+  id: string;
+  profile_id: string;
+  vehicle_id: string | null;
+  customer_name: string;
+  customer_phone: string | null;
+  date: string;
+  time_slot: string;
+  service_type: string | null;
+  notes: string | null;
+  status: "confirmed" | "completed" | "cancelled" | "no_show";
+  created_at: string;
 }
 
 export const JOB_TYPES = [
@@ -89,3 +145,40 @@ export const FILE_CATEGORIES = [
   { value: "dyno_report" as const, label: "Dyno riport" },
   { value: "other" as const, label: "Egyéb" },
 ];
+
+export const QUOTE_STATUS_LABELS: Record<Quote["status"], string> = {
+  draft: "Piszkozat",
+  sent: "Elküldve",
+  accepted: "Elfogadva",
+  rejected: "Elutasítva",
+  expired: "Lejárt",
+};
+
+export const APPOINTMENT_STATUS_LABELS: Record<Appointment["status"], string> = {
+  confirmed: "Megerősítve",
+  completed: "Teljesítve",
+  cancelled: "Lemondva",
+  no_show: "Nem jelent meg",
+};
+
+export const SERVICE_TYPES = [
+  "Stage 1 tuning",
+  "Stage 2 tuning",
+  "Stage 3 tuning",
+  "DPF/EGR/AdBlue",
+  "Diagnosztika",
+  "TCU tune",
+  "Egyéb",
+] as const;
+
+export const TIME_SLOTS = [
+  "08:00", "09:00", "10:00", "11:00", "12:00",
+  "13:00", "14:00", "15:00", "16:00", "17:00",
+] as const;
+
+export const WARRANTY_OPTIONS = [
+  { value: 0, label: "Nincs garancia" },
+  { value: 3, label: "3 hónap" },
+  { value: 6, label: "6 hónap" },
+  { value: 12, label: "12 hónap" },
+] as const;

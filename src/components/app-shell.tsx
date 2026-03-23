@@ -17,12 +17,16 @@ import {
   LogOut,
   Menu,
   Cpu,
+  CalendarDays,
+  FileText,
 } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Naptár", href: "/calendar", icon: CalendarDays },
   { label: "Járművek", href: "/vehicles", icon: Car },
   { label: "Új munka", href: "/jobs/new", icon: PlusCircle },
+  { label: "Árajánlatok", href: "/quotes", icon: FileText },
   { label: "Beállítások", href: "/settings", icon: Settings },
 ];
 

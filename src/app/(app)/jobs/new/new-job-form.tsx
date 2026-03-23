@@ -67,6 +67,8 @@ export function NewJobForm({
   const [fileSource, setFileSource] = useState("");
   const [status, setStatus] = useState("done");
   const [notes, setNotes] = useState("");
+  const [warrantyMonths, setWarrantyMonths] = useState("6");
+  const [warrantyConditions, setWarrantyConditions] = useState("");
 
   // Step 3: Files
   const [files, setFiles] = useState<UploadableFile[]>([]);
@@ -115,6 +117,8 @@ export function NewJobForm({
         file_source: fileSource || undefined,
         notes: notes || undefined,
         status,
+        warranty_months: parseInt(warrantyMonths) || 0,
+        warranty_conditions: warrantyConditions || undefined,
       });
 
       // Upload files (only selected ones)
@@ -388,6 +392,38 @@ export function NewJobForm({
                 placeholder="Megjegyzések a munkáról..."
                 rows={3}
               />
+            </div>
+            {/* Warranty section */}
+            <Separator className="opacity-30" />
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#64748b]">Garancia</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label>Garancia időtartam</Label>
+                  <Select value={warrantyMonths} onValueChange={(val) => setWarrantyMonths(val ?? "6")}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">Nincs garancia</SelectItem>
+                      <SelectItem value="3">3 hónap</SelectItem>
+                      <SelectItem value="6">6 hónap</SelectItem>
+                      <SelectItem value="12">12 hónap</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {parseInt(warrantyMonths) > 0 && (
+                <div className="space-y-1.5">
+                  <Label>Garancia feltételek</Label>
+                  <Textarea
+                    value={warrantyConditions}
+                    onChange={(e) => setWarrantyConditions(e.target.value)}
+                    placeholder="Pl. Csak gyári állapotú kipufogó rendszer mellett érvényes..."
+                    rows={2}
+                  />
+                </div>
+              )}
             </div>
             <div className="flex justify-between">
               <Button variant="outline" onClick={() => setStep(1)}>

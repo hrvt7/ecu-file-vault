@@ -41,6 +41,8 @@ export async function createJob(formData: {
   file_source?: string;
   notes?: string;
   status: string;
+  warranty_months?: number;
+  warranty_conditions?: string;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
