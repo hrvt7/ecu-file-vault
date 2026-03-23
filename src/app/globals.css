@@ -8,8 +8,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
-  --font-heading: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Geist Mono", ui-monospace, monospace;
+  --font-heading: "Rajdhani", "Geist", ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,7 +46,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --color-cyan: oklch(0.72 0.17 195);
+  --color-ecu-accent: #0ea5e9;
+  --color-ecu-cyan: #06d6a0;
+  --color-ecu-purple: #a78bfa;
+  --color-ecu-warning: #f59e0b;
+  --color-ecu-danger: #ef4444;
+  --color-ecu-success: #10b981;
 }
 
 :root {
@@ -73,7 +78,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -84,38 +89,41 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   DARK THEME — Automotive ECU Telemetry
+   ═══════════════════════════════════════════════════════════════ */
 .dark {
-  --background: oklch(0.11 0.005 260);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.14 0.008 260 / 80%);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.15 0.008 260);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.65 0.2 260);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.18 0.01 260);
-  --secondary-foreground: oklch(0.9 0 0);
-  --muted: oklch(0.18 0.01 260);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.18 0.015 260);
-  --accent-foreground: oklch(0.95 0 0);
-  --destructive: oklch(0.65 0.2 25);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 10%);
-  --ring: oklch(0.65 0.2 260);
-  --chart-1: oklch(0.65 0.2 260);
-  --chart-2: oklch(0.7 0.18 145);
-  --chart-3: oklch(0.75 0.15 85);
-  --chart-4: oklch(0.6 0.2 25);
-  --chart-5: oklch(0.65 0.2 330);
-  --sidebar: oklch(0.12 0.008 260);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.2 260);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.18 0.015 260);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.65 0.2 260);
+  --background: #06080d;
+  --foreground: #e2e8f0;
+  --card: rgba(12, 16, 23, 0.8);
+  --card-foreground: #e2e8f0;
+  --popover: #161c28;
+  --popover-foreground: #e2e8f0;
+  --primary: #0ea5e9;
+  --primary-foreground: #ffffff;
+  --secondary: #111620;
+  --secondary-foreground: #94a3b8;
+  --muted: #111620;
+  --muted-foreground: #64748b;
+  --accent: rgba(14, 165, 233, 0.08);
+  --accent-foreground: #e2e8f0;
+  --destructive: #ef4444;
+  --border: rgba(255, 255, 255, 0.06);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: rgba(14, 165, 233, 0.4);
+  --chart-1: #0ea5e9;
+  --chart-2: #06d6a0;
+  --chart-3: #f59e0b;
+  --chart-4: #ef4444;
+  --chart-5: #a78bfa;
+  --sidebar: #0c1017;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #0ea5e9;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(14, 165, 233, 0.08);
+  --sidebar-accent-foreground: #e2e8f0;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-ring: rgba(14, 165, 233, 0.4);
 }
 
 @layer base {
@@ -130,66 +138,138 @@
   }
 }
 
-/* Automotive grid background pattern */
+/* ═══════════════════════════════════════════════════════════════
+   TELEMETRY GRID BACKGROUND
+   ═══════════════════════════════════════════════════════════════ */
 .bg-grid-pattern {
   background-image:
-    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
+    linear-gradient(rgba(14, 165, 233, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 165, 233, 0.018) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* Glassmorphism card */
+/* ═══════════════════════════════════════════════════════════════
+   GLASS CARD — Automotive glassmorphism
+   ═══════════════════════════════════════════════════════════════ */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(12, 16, 23, 0.8);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
 }
 
-/* Badge glow */
-.badge-glow {
-  box-shadow: 0 0 8px currentColor;
+/* ═══════════════════════════════════════════════════════════════
+   CARD HOVER — accent glow
+   ═══════════════════════════════════════════════════════════════ */
+.card-hover {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-hover:hover {
+  border-color: rgba(14, 165, 233, 0.2);
+  box-shadow: 0 0 24px rgba(14, 165, 233, 0.06);
+  transform: scale(1.003);
 }
 
-/* Count-up animation */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ═══════════════════════════════════════════════════════════════
+   HEADING STYLES — Rajdhani uppercase
+   ═══════════════════════════════════════════════════════════════ */
+.ecu-heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.ecu-heading-lg {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-/* Staggered fade in */
+/* ═══════════════════════════════════════════════════════════════
+   GRADIENT BUTTON
+   ═══════════════════════════════════════════════════════════════ */
+.btn-gradient {
+  background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  transition: filter 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+.btn-gradient:hover {
+  filter: brightness(1.12);
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+}
+.btn-gradient:active {
+  transform: scale(0.97);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════ */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in-up {
   animation: fadeInUp 0.4s ease-out forwards;
   opacity: 0;
 }
 
-/* Stagger delays */
-.stagger-1 { animation-delay: 0.05s; }
-.stagger-2 { animation-delay: 0.1s; }
-.stagger-3 { animation-delay: 0.15s; }
-.stagger-4 { animation-delay: 0.2s; }
-.stagger-5 { animation-delay: 0.25s; }
-.stagger-6 { animation-delay: 0.3s; }
+/* Stagger delays — card entrance */
+.stagger-1 { animation-delay: 0.06s; }
+.stagger-2 { animation-delay: 0.12s; }
+.stagger-3 { animation-delay: 0.18s; }
+.stagger-4 { animation-delay: 0.24s; }
+.stagger-5 { animation-delay: 0.30s; }
+.stagger-6 { animation-delay: 0.36s; }
+.stagger-7 { animation-delay: 0.42s; }
+.stagger-8 { animation-delay: 0.48s; }
 
-/* Tabular nums for dashboard numbers */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+/* Badge pop-in */
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-pop-in {
+  animation: popIn 0.25s ease-out forwards;
+  opacity: 0;
+}
+
+/* Power line draw */
+@keyframes drawLine {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
 /* Pulse glow for power numbers */
 @keyframes pulseGlow {
-  0%, 100% { text-shadow: 0 0 4px rgba(34, 197, 94, 0.3); }
-  50% { text-shadow: 0 0 12px rgba(34, 197, 94, 0.6); }
+  0%, 100% { text-shadow: 0 0 4px rgba(6, 214, 160, 0.3); }
+  50% { text-shadow: 0 0 12px rgba(6, 214, 160, 0.6); }
 }
 .power-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
+  animation: pulseGlow 2.5s ease-in-out infinite;
 }
 
-/* Active sidebar indicator */
+/* Skeleton pulse */
+@keyframes shimmer {
+  0% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.5; }
+}
+.skeleton-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background: var(--secondary);
+  border-radius: 6px;
+}
+
+/* Tabular nums */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR — Active indicator
+   ═══════════════════════════════════════════════════════════════ */
 .sidebar-active-indicator {
   position: relative;
 }
@@ -201,27 +281,30 @@
   transform: translateY(-50%);
   width: 3px;
   height: 60%;
-  background: var(--primary);
+  background: #0ea5e9;
   border-radius: 0 4px 4px 0;
   transition: height 0.2s ease;
 }
 
-/* Card hover effect */
-.card-hover {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-.card-hover:hover {
-  border-color: rgba(59, 130, 246, 0.2);
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.06);
-  transform: scale(1.005);
+/* ═══════════════════════════════════════════════════════════════
+   MICRO-INTERACTIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Button press */
+.btn-press:active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
 }
 
-/* Gradient button */
-.btn-gradient {
-  background: linear-gradient(135deg, #3b82f6, #06b6d4);
-  transition: filter 0.2s ease, transform 0.15s ease;
+/* Input focus glow */
+.input-glow:focus {
+  border-color: rgba(14, 165, 233, 0.4);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.btn-gradient:hover {
-  filter: brightness(1.1);
-  transform: scale(1.02);
+
+/* Badge brightness on hover */
+.badge-hover:hover {
+  filter: brightness(1.15);
+  transition: filter 0.15s ease;
 }
